@@ -54,16 +54,17 @@ VCPEPUBIP2="10.2.3.2"
 
 
 #QoS
-#CAUDAL DE BAJADA
-#./setQoS.sh $VCPE1
-#./setQoS.sh $VCPE2
-#CAUDAL DE SUBIDA
+#CAUDAL DE DOWNLOAD
+#./setQoSDownload.sh $VCPE1
+#./setQoSDownload.sh $VCPE2
+
+#CAUDAL DE UPLOAD
 #sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-controller-net1
 #sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-rules-net1
 #sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-controller-net2
 #sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-rules-net2
-
-
+#./setQoSUpload.sh brg1
+#./setQoSUpload.sh brg2
 
 
 
