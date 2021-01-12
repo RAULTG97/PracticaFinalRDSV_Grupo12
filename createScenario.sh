@@ -52,7 +52,7 @@ VCPEPUBIP2="10.2.3.2"
 ./configureVyOS.sh $VCPE1 $VCPEPRIVIP $VCPEPUBIP1
 ./configureVyOS.sh $VCPE2 $VCPEPRIVIP $VCPEPUBIP2
 
-
+echo "HOSTS IP CONFIGURATION... DHCLIENT..."
 #DHCLIENT PARA LOS 4 HOSTS
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h11
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h12
