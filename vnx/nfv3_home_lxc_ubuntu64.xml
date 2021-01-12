@@ -60,6 +60,10 @@ SPAIN
     <exec seq="get-h11-ip" type="verbatim">
         hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.255
     </exec>
+    <!-- Request h11 IP -->
+    <exec seq="dhclient-h11" type="verbatim">
+        dhclient
+    </exec>
   </vm>   
   <vm name="h12" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
@@ -75,6 +79,10 @@ SPAIN
     <!-- Get h12 IP -->
     <exec seq="get-h12-ip" type="verbatim">
         hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.255
+    </exec>
+    <!-- Request h12 IP -->
+    <exec seq="dhclient-h12" type="verbatim">
+        dhclient
     </exec>
   </vm> 
   <vm name="brg1" type="lxc" exec_mode="lxc-attach" arch="x86_64">
@@ -135,6 +143,11 @@ SPAIN
     <exec seq="get-h21-ip" type="verbatim">
         hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.255
     </exec>
+    </exec>
+    <!-- Request h21 IP -->
+    <exec seq="dhclient-h21" type="verbatim">
+        dhclient
+    </exec>
   </vm>   
   <vm name="h22" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
@@ -150,6 +163,10 @@ SPAIN
     <!-- Get h22 IP -->
     <exec seq="get-h22-ip" type="verbatim">
         hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.255
+    </exec>
+    <!-- Request h22 IP -->
+    <exec seq="dhclient-h22" type="verbatim">
+        dhclient
     </exec>
   </vm> 
   <vm name="brg2" type="lxc" exec_mode="lxc-attach" arch="x86_64">

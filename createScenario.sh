@@ -53,16 +53,38 @@ VCPEPUBIP2="10.2.3.2"
 ./configureVyOS.sh $VCPE2 $VCPEPRIVIP $VCPEPUBIP2
 
 
+#DHCLIENT PARA LOS 4 HOSTS
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h11
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h12
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h21
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h22
+
+#OBTENEMOS LAS IP ASIGNADAS
+IPH11=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h11-ip | grep 192.168.255`
+IPH12=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h12-ip | grep 192.168.255`
+IPH21=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h21-ip | grep 192.168.255`
+IPH22=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h22-ip | grep 192.168.255`
+echo " "
+echo "IPH11 --> $IPH11"
+echo " "
+echo "IPH12 --> $IPH12"
+echo " "
+echo "IPH21 --> $IPH21"
+echo " "
+echo "IPH22 --> $IPH22"
+echo " "
+
+
 #QoS
 #CAUDAL DE DOWNLOAD
 #./setQoSDownload.sh $VCPE1
 #./setQoSDownload.sh $VCPE2
 
 #CAUDAL DE UPLOAD
-#sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-controller-net1
-#sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-rules-net1
-#sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-controller-net2
-#sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -x config-QoS-rules-net2
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net1
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net1
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
 #./setQoSUpload.sh brg1
 #./setQoSUpload.sh brg2
 
