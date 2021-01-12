@@ -93,31 +93,31 @@ SPAIN
       <ipv4>10.255.0.2/24</ipv4>
     </if>
     <exec seq="on_boot" type="verbatim">
+      <!-- ORIGINAL
         service openvswitch-switch start
         sleep 5
         ovs-vsctl add-br br0
         ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.255.0.1
+        ovs-vsctl add-port br0 vxlan1 - - set interface vxlan1 type=vxlan options:remote_ip=10.255.0.1
+      -->
+        service openvswitch-switch start
+        sleep 5
+        ovs-vsctl add-br br0
+        ovs-vsctl add-port br0 eth1
+        ip link add vxlan1 type vxlan id 0 remote 10.255.0.1 dstport 4789 dev eth2
+        ovs-vsctl add-port br0 vxlan1
+        ifconfig vxlan1 up
     </exec>
     <!-- Configure QoS -->
     <exec seq="config-QoS-controller-net1" type="verbatim">
-        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
-        ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;
         ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13
         ovs-vsctl set-fail-mode br0 secure
         ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000001
         ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
         ovs-vsctl set-manager ptcp:6632
-
-      <!-- TO DO
-      CAMBIAR ESTA PARTE enlaces VXLAN VIENE EN EL ENUNCIADO
-        service openvswitch-switch start
-        sleep 5
-        ovs-vsctl add-br br0
-        ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1  set interface vxlan1 type=vxlan options:remote_ip=10.255.0.1
-      HASTA AQUI >>>
-      -->
+        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
+        ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;
+        read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
     </exec>
     <exec seq="config-QoS-rules-net1" type="verbatim">
       
@@ -176,31 +176,31 @@ SPAIN
       <ipv4>10.255.0.4/24</ipv4>
     </if>
     <exec seq="on_boot" type="verbatim">
+        <!-- ORIGINAL
         service openvswitch-switch start
         sleep 5
         ovs-vsctl add-br br0
         ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.255.0.3
+        ovs-vsctl add-port br0 vxlan1 - - set interface vxlan1 type=vxlan options:remote_ip=10.255.0.3
+        -->
+        service openvswitch-switch start
+        sleep 5
+        ovs-vsctl add-br br0
+        ovs-vsctl add-port br0 eth1
+        ip link add vxlan1 type vxlan id 0 remote 10.255.0.3 dstport 4789 dev eth2
+        ovs-vsctl add-port br0 vxlan1
+        ifconfig vxlan1 up
     </exec>
     <!-- Configure QoS -->
     <exec seq="config-QoS-controller-net2" type="verbatim">
-        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
-        ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;
         ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13
         ovs-vsctl set-fail-mode br0 secure
         ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000001
         ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
         ovs-vsctl set-manager ptcp:6632
-
-      <!-- TO DO
-      CAMBIAR ESTA PARTE
-        service openvswitch-switch start
-        sleep 5
-        ovs-vsctl add-br br0
-        ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1  set interface vxlan1 type=vxlan options:remote_ip=10.255.0.3
-      HASTA AQUI >>>
-      -->
+        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
+        ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;
+        read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
     </exec>
     <exec seq="config-QoS-rules-net2" type="verbatim">
       
@@ -208,7 +208,7 @@ SPAIN
         curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://127.0.0.1:8080/qos/queue/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.20", "nw_proto": "UDP", "udp_dst": "5002"}, "actions":{"queue": "1"}}' http://127.0.0.1:8080/qos/rules/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.21", "nw_proto": "UDP", "udp_dst": "5002"}, "actions":{"queue": "0"}}' http://127.0.0.1:8080/qos/rules/0000000000000001
-
+        
     </exec>
 
   </vm>

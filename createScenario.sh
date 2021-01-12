@@ -53,6 +53,7 @@ VCPEPUBIP2="10.2.3.2"
 ./configureVyOS.sh $VCPE2 $VCPEPRIVIP $VCPEPUBIP2
 
 echo "HOSTS IP CONFIGURATION... DHCLIENT..."
+sleep 10
 #DHCLIENT PARA LOS 4 HOSTS
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h11
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient-h12
@@ -75,16 +76,27 @@ echo "IPH22 --> $IPH22"
 echo " "
 
 
+echo "QoS CONFIGURATION..."
+echo "DOWNLOAD..."
 #QoS
 #CAUDAL DE DOWNLOAD
 #./setQoSDownload.sh $VCPE1
 #./setQoSDownload.sh $VCPE2
 
+
 #CAUDAL DE UPLOAD
+echo "UPLOAD NET 1..."
 #sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net1
+read -p "Controlador net1 configurado, pulsa cualquier tecla para configurar las reglas de QoS"
 #sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net1
+echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
+
+echo "UPLOAD NET 2..."
 #sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
+read -p "Controlador net2 configurado, pulsa cualquier tecla para configurar las reglas de QoS"
 #sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
+echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
+
 #./setQoSUpload.sh brg1
 #./setQoSUpload.sh brg2
 
