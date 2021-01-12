@@ -43,8 +43,11 @@ sudo docker exec -it $VNF1 ovs-vsctl set bridge br0 other-config:datapath-id=000
 sudo docker exec -it $VNF1 ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
 sudo docker exec -it $VNF1 ovs-vsctl set-manager ptcp:6632
 sudo docker exec -ti $VNF1 /bin/bash -c "sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py"
-sudo docker exec -it $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &
+#sudo docker exec -it $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &
 
+echo "Controlador DOWNLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
+echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
+echo " "
 read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
 
 #REGLAS SIN PUERTO Y CON PARAMETROS
@@ -52,6 +55,11 @@ sudo docker exec -it $VNF1 curl -X PUT -d '"tcp:127.0.0.1:6632"' http://127.0.0.
 sudo docker exec -it $VNF1 curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "12000000", "queues": [{"max_rate": "4000000"}, {"min_rate": "8000000"}]}' http://127.0.0.1:8080/qos/queue/0000000000000002
 sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "'$IP1'"}, "actions":{"queue": "1"}}' http://127.0.0.1:8080/qos/rules/0000000000000002
 sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "'$IP2'"}, "actions":{"queue": "0"}}' http://127.0.0.1:8080/qos/rules/0000000000000002
+
+
+
+
+
 
 
 #REGLAS CON PUERTO Y SIN PARAMETROS
@@ -63,10 +71,3 @@ sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "'$IP2'"}, "act
 #REGLAS SIN PUERTO Y SIN PARAMETROS
 #sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "192.168.255.20"}, "actions":{"queue": "1"}}' http://127.0.0.1:8080/qos/rules/0000000000000002
 #sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "192.168.255.21"}, "actions":{"queue": "0"}}' http://127.0.0.1:8080/qos/rules/0000000000000002
-
-
-#CAUDAL DE SE SUBIDA - ESTOY HAY QUE LLEVARLO A LA PARTE DE VNX DEL BRGX
-#curl -X PUT -d '"tcp:172.17.0.2:6632"' http://172.17.2.100:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
-#curl -X POST -d '{"port_name": "eth1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "4000000"}]}' http://172.17.2.100:8080/qos/queue/0000000000000001 
-#curl -X POST -d '{"match": {"nw_src": "192.168.255.20", "nw_proto": "UDP", "udp_dst": "5002"}, "actions":{"queue": "1"}}' http://172.17.2.100:8080/qos/rules/0000000000000001 
-#curl -X POST -d '{"match": {"nw_src": "192.168.255.21", "nw_proto": "UDP", "udp_dst": "5002"}, "actions":{"queue": "0"}}' http://172.17.2.100:8080/qos/rules/0000000000000001
