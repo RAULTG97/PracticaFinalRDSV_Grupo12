@@ -38,7 +38,7 @@ sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set bridge br0 other-
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set-controller br0 tcp:127.0.0.1:6633"
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set-manager ptcp:6632"
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py"
-#sudo lxc-attach --clear-env -n $BRGX -- bash -c "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &"
+#sudo lxc-attach --clear-env -n $BRGX -- nohup bash -c "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &"
 
 echo "Controlador UPLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
 echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
