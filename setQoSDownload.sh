@@ -35,19 +35,17 @@ then
 fi
 
 
-#sudo docker exec -it $VNF1 sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py
-#sudo docker exec -it $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py
 sudo docker exec -it $VNF1 ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13
 sudo docker exec -it $VNF1 ovs-vsctl set-fail-mode br0 secure
 sudo docker exec -it $VNF1 ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000002
 sudo docker exec -it $VNF1 ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
 sudo docker exec -it $VNF1 ovs-vsctl set-manager ptcp:6632
 sudo docker exec -ti $VNF1 /bin/bash -c "sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py"
-#sudo docker exec -d $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &
+sudo docker exec -d $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py
 
-echo "Controlador DOWNLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
-echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
-echo " "
+#echo "Controlador DOWNLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
+#echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
+#echo " "
 read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
 
 #REGLAS SIN PUERTO Y CON PARAMETROS
