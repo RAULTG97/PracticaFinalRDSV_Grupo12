@@ -46,12 +46,14 @@ sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -t
 VCPEPRIVIP="192.168.255.1"
 VCPEPUBIP1="10.2.3.1"
 VCPEPUBIP2="10.2.3.2"
-IPController1="10.0.0.10"
-IPController2="10.0.0.11"
+IPController1="10.255.0.1"
+IPController2="10.255.0.3"
+IPBRG1="10.255.0.2"
+IPBRG2="10.255.0.4"
 
 #CREAR VXLANs
-./vcpe_start.sh $VCPE1 10.255.0.1 10.255.0.2 $IPController1
-./vcpe_start.sh $VCPE2 10.255.0.3 10.255.0.4 $IPController2
+./vcpe_start.sh $VCPE1 $IPController1 $IPBRG1 
+./vcpe_start.sh $VCPE2 $IPController2 $IPBRG2 
 
 
 #CONFIGURAR VYOS [NAT Y DHCP]
@@ -106,11 +108,11 @@ echo "CONFIGURADAS REGLAS QoS NET 2 DOWNLOAD..."
 #CAUDAL DE UPLOAD
 read -p "STOOoOoOOOOOOooOooOOooooOooOOoooOOOooooP"
 echo "UPLOAD NET 1..."
-./setQoSUpload.sh brg1 $IPController1
+./setQoSUpload.sh brg1 $IPBRG1 $IPController1
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
 #echo "UPLOAD NET 2..."
-#./setQoSUpload.sh brg2 $IPController2
+#./setQoSUpload.sh brg2 $IPBRG2 $IPController2
 #echo " "
 #echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
 
@@ -142,7 +144,7 @@ echo "ESCENARIO LANZADO CORRECTAMENTE, PARA PROBARLO CON IPERF3: "
 echo "Servidor: iperf3 -s -i 1"
 echo "Cliente:  iperf3 -c direccionIPDestino -b capacidadMaximaCola[M] -l 1200"
 echo "Ejemplo: "
-echo "Cliente  [ VyOS ] -->  iperf3 -c 192.168.255.20 -b 12M-l 1200 "
+echo "Cliente  [ VyOS ] -->  iperf3 -c 192.168.255.20 -b 12M -l 1200 "
 echo "Servidor [ h11  ] -->  iperf3 -s -i 1"
 
 

@@ -3,15 +3,14 @@
 USAGE="
 Usage:
     
-vcpe_start <vcpe_name> <vnf_tunnel_ip> <home_tunnel_ip> <ip_controller>
+vcpe_start <vcpe_name> <vnf_tunnel_ip> <home_tunnel_ip>
     being:
         <vcpe_name>: the name of the network service instance in OSM 
         <vnf_tunnel_ip>: the ip address for the vnf side of the tunnel
         <home_tunnel_ip>: the ip address for the home side of the tunnel
-        <ip_controller>: the ip address for the controller 
 "
 
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 3 ]]; then
         echo ""       
     echo "ERROR: incorrect number of parameters"
     echo "$USAGE"
@@ -23,7 +22,7 @@ VNF2="mn.dc1_$1-2-ubuntu-1"
 
 VNFTUNIP="$2"
 HOMETUNIP="$3"
-IPController="$4"
+
 
 
 ETH11=`sudo docker exec -it $VNF1 ifconfig | grep eth1 | awk '{print $1}' | tr -d ':'`
@@ -41,9 +40,7 @@ echo "--"
 echo "--Connecting vCPE service with AccessNet and ExtNet..."
 
 sudo ovs-docker add-port AccessNet veth0 $VNF1
-sudo ovs-docker add-port QoS eth2 $VNF1
 sudo ovs-docker add-port ExtNet eth2 $VNF2
-sudo docker exec -it $VNF1 ifconfig eth2 $IPController/24
 
 echo "--"
 echo "--Setting VNF..."

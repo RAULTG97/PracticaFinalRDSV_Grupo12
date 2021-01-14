@@ -6,10 +6,11 @@ Usage:
 setQoSUpload <brgX_name> <ip_controller>
     being:
         <brgX_name>: brg1(homeNet1) or brg2(homeNet2)
+        <ip_bridge>: the ip address for the bridge
         <ip_controller>: the ip address for the controller
 "
 
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 3 ]]; then
         echo ""       
     echo "ERROR: incorrect number of parameters"
     echo "$USAGE"
@@ -18,14 +19,15 @@ fi
 
 
 BRGX="$1"
-IPController="$2"
+IPBridge="$2"
+IPController="$3"
+
 
 if [ $BRGX == "brg1" ]
 then 
 	echo "VCPE-1 QOS UPLOAD CONFIGURATION"
 	IP1=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h11-ip | grep 192.168.255`
 	IP2=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h12-ip | grep 192.168.255`
-	IPBridge="10.0.0.1"
 fi
 
 if [ $BRGX == "brg2" ]
@@ -33,7 +35,6 @@ then
 	echo "VCPE-2 QOS UPLOAD CONFIGURATION"
 	IP1=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h21-ip | grep 192.168.255`
 	IP2=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h22-ip | grep 192.168.255`
-	IPBridge="10.0.0.2"
 fi
 
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13"
