@@ -96,6 +96,30 @@ echo "IPController2 --> $IPController2"
 echo " "
 
 
+#IPv6 y DHCP
+#TO DO
+#DHCLIENT -6 PARA LOS 4 HOSTS
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h11
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h12
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h21
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h22
+
+#OBTENEMOS LAS IP ASIGNADAS
+IPH11v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h11-ipv6`
+IPH12v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h12-ipv6`
+IPH21v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h21-ipv6`
+IPH22v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h22-ipv6`
+echo " "
+echo "IPH11v6 --> $IPH11v6"
+echo " "
+echo "IPH12v6 --> $IPH12v6"
+echo " "
+echo "IPH21v6 --> $IPH21v6"
+echo " "
+echo "IPH22v6 --> $IPH22v6"
+echo " "
+
+
 #QoS
 echo "QoS CONFIGURATION..."
 echo "DOWNLOAD..."
@@ -152,9 +176,3 @@ echo "Cliente:  iperf3 -c direccionIPDestino -b capacidadMaximaCola[M] -l 1200"
 echo "Ejemplo: "
 echo "Cliente  [ VyOS ] -->  iperf3 -c 192.168.255.20 -b 12M -l 1200 "
 echo "Servidor [ h11  ] -->  iperf3 -s -i 1"
-
-
-
-
-#IPv6 y DHCP
-#TO DO
