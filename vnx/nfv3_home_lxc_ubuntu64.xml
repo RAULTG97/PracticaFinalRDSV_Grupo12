@@ -44,6 +44,7 @@ SPAIN
   <net name="AccessNet" mode="openvswitch" managed="no"/>
   <net name="home1net" mode="virtual_bridge" />
   <net name="home2net" mode="virtual_bridge" />
+  <net name="QoS" mode="openvswitch" managed="no"/>
   
   <vm name="h11" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
@@ -92,6 +93,10 @@ SPAIN
     <if id="2" net="AccessNet">
       <ipv4>10.255.0.2/24</ipv4>
     </if>
+
+    <if id="3" net="QoS">
+      <ipv4>10.0.0.1/24</ipv4>
+    </if>
     <exec seq="on_boot" type="verbatim">
       <!-- ORIGINAL
         service openvswitch-switch start
@@ -113,17 +118,15 @@ SPAIN
         ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13
         ovs-vsctl set-fail-mode br0 secure
         ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000001
-        ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
+        ovs-vsctl set-controller br0 tcp:10.0.0.10:6633
         ovs-vsctl set-manager ptcp:6632
-        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
-        <!-- ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;-->
     </exec>
     <exec seq="config-QoS-rules-net1" type="verbatim">
       
-        curl -X PUT -d '"tcp:127.0.0.1:6632"' http://127.0.0.1:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
-        curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://127.0.0.1:8080/qos/queue/0000000000000001 
-        curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://127.0.0.1:8080/qos/rules/0000000000000001 
-        curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://127.0.0.1:8080/qos/rules/0000000000000001
+        curl -X PUT -d '"tcp:10.0.0.1:6632"' http://10.0.0.10:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
+        curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://10.0.0.10:8080/qos/queue/0000000000000001 
+        curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://10.0.0.10:8080/qos/rules/0000000000000001 
+        curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://10.0.0.10:8080/qos/rules/0000000000000001
     
     </exec>
   </vm>
@@ -174,6 +177,9 @@ SPAIN
     <if id="2" net="AccessNet">
       <ipv4>10.255.0.4/24</ipv4>
     </if>
+    <if id="3" net="QoS">
+      <ipv4>10.0.0.2/24</ipv4>
+    </if>
     <exec seq="on_boot" type="verbatim">
         <!-- ORIGINAL
         service openvswitch-switch start
@@ -195,17 +201,16 @@ SPAIN
         ovs-vsctl set bridge br0 protocols=OpenFlow10,OpenFlow12,OpenFlow13
         ovs-vsctl set-fail-mode br0 secure
         ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000001
-        ovs-vsctl set-controller br0 tcp:127.0.0.1:6633
+        ovs-vsctl set-controller br0 tcp:10.0.0.11:6633
         ovs-vsctl set-manager ptcp:6632
-        sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py 
         <!-- ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;-->
     </exec>
     <exec seq="config-QoS-rules-net2" type="verbatim">
       
-        curl -X PUT -d '"tcp:127.0.0.1:6632"' http://127.0.0.1:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
-        curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://127.0.0.1:8080/qos/queue/0000000000000001 
-        curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://127.0.0.1:8080/qos/rules/0000000000000001 
-        curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://127.0.0.1:8080/qos/rules/0000000000000001
+        curl -X PUT -d '"tcp:10.0.0.2:6632"' http://10.0.0.11:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
+        curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://10.0.0.11:8080/qos/queue/0000000000000001 
+        curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://10.0.0.11:8080/qos/rules/0000000000000001 
+        curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://10.0.0.11:8080/qos/rules/0000000000000001
 
     </exec>
 

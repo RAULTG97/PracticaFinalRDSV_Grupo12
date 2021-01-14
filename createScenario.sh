@@ -6,8 +6,10 @@ echo "ARRANCANDO ESCENARIO..."
 #Switches OVS para AccessNet y ExtNet
 sudo ovs-vsctl --if-exists del-br AccessNet
 sudo ovs-vsctl --if-exists del-br ExtNet
+sudo ovs-vsctl --if-exists del-br QoS
 sudo ovs-vsctl add-br AccessNet
 sudo ovs-vsctl add-br ExtNet
+sudo ovs-vsctl add-br QoS
 
 
 #Creamos las imagenes de Docker
@@ -44,9 +46,12 @@ sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -t
 VCPEPRIVIP="192.168.255.1"
 VCPEPUBIP1="10.2.3.1"
 VCPEPUBIP2="10.2.3.2"
+IPController1="10.0.0.10"
+IPController2="10.0.0.11"
+
 #CREAR VXLANs
-./vcpe_start.sh $VCPE1 10.255.0.1 10.255.0.2
-./vcpe_start.sh $VCPE2 10.255.0.3 10.255.0.4
+./vcpe_start.sh $VCPE1 10.255.0.1 10.255.0.2 $IPController1
+./vcpe_start.sh $VCPE2 10.255.0.3 10.255.0.4 $IPController2
 
 
 #CONFIGURAR VYOS [NAT Y DHCP]
@@ -76,31 +81,38 @@ echo "IPH21 --> $IPH21"
 echo " "
 echo "IPH22 --> $IPH22"
 echo " "
+echo "IPController1 --> $IPController1"
+echo " "
+echo "IPController2 --> $IPController2"
+echo " "
 
 
+read -p "STOOoOoOOOOOOooOoP MIRAR IPS"
 echo "QoS CONFIGURATION..."
 echo "DOWNLOAD..."
 #QoS
 #CAUDAL DE DOWNLOAD
 echo "DOWNLOAD NET 1..."
-./setQoSDownload.sh $VCPE1
+./setQoSDownload.sh $VCPE1 $IPController1
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 1 DOWNLOAD..."
 echo "DOWNLOAD NET 2..."
-./setQoSDownload.sh $VCPE2
+read -p "STOOoOoOOOOOOooOooOOooooOooOOoooOOOooooP"
+./setQoSDownload.sh $VCPE2 $IPController2
 echo " "
-echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
+echo "CONFIGURADAS REGLAS QoS NET 2 DOWNLOAD..."
 
 #SE PUEDE HACER DE LAS DOS FORMAS CREO EL QOS DE UPLOAD (MAÑANA LO PRUEBO OTRA VEZ)
 #CAUDAL DE UPLOAD
+read -p "STOOoOoOOOOOOooOooOOooooOooOOoooOOOooooP"
 echo "UPLOAD NET 1..."
-./setQoSUpload.sh brg1
+./setQoSUpload.sh brg1 $IPController1
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
-echo "UPLOAD NET 2..."
-./setQoSUpload.sh brg2
-echo " "
-echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
+#echo "UPLOAD NET 2..."
+#./setQoSUpload.sh brg2 $IPController2
+#echo " "
+#echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
 
 
 #CAUDAL DE UPLOAD
@@ -113,14 +125,15 @@ echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
 #sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net1
 #echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
 
-#echo "UPLOAD NET 2..."
-#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
+echo "UPLOAD NET 2..."
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
 #echo "Controlador UPLOAD configurado, para iniciarlo acceda a vclass de la red 2 y ejecute: "
 #echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
 #echo " "
-#read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
-#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
-#echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
+read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
+sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
+sleep 5
+echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
 
 
 
