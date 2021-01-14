@@ -33,7 +33,6 @@ IPETH0=`sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 hostname -I | tr " " "\n" 
 
 sudo docker exec -ti $VNF2 /bin/bash -c "
 sudo sysctl net.ipv6.conf.all.disable_ipv6=0
-restart dhcpv6 server
 source /opt/vyatta/etc/functions/script-template
 configure
 set system host-name $HNAME
