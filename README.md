@@ -7,7 +7,7 @@
 ------------
 
 ## Escenario:
-![Escenario](https://github.com/RAULTG97/PracticaFinalRDSV_Grupo12/blob/main/PracticaFinalRDSV.png)
+![Escenario](https://github.com/RAULTG97/PracticaFinalRDSV_Grupo12/blob/main/images/PracticaFinalRDSV.png)
 
 ------------
 ## Lo que falta por hacer:
