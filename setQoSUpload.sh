@@ -3,7 +3,7 @@
 USAGE="
 Usage:
     
-setQoSUpload <brgX_name> <ip_controller>
+setQoSUpload <brgX_name> <ip-bridge> <ip_controller>
     being:
         <brgX_name>: brg1(homeNet1) or brg2(homeNet2)
         <ip_bridge>: the ip address for the bridge
@@ -43,10 +43,8 @@ sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set bridge br0 other-
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set-controller br0 tcp:$IPController:6633"
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set-manager ptcp:6632"
 
-echo "Controlador UPLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
-echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
 echo " "
-read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
+read -p "Controlador configurado, pulsa INTRO para configurar las reglas de QoS"
 
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X PUT -d '\"tcp:$IPBridge:6632\"' http://$IPController:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr"
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X POST -d '{\"port_name\": \"vxlan1\", \"type\": \"linux-htb\", \"max_rate\": \"6000000\", \"queues\": [{\"max_rate\": \"2000000\"}, {\"min_rate\": \"2000000\"}]}' http://$IPController:8080/qos/queue/0000000000000001" 

@@ -45,10 +45,8 @@ sudo docker exec -it $VNF1 ovs-vsctl set-manager ptcp:6632
 sudo docker exec -ti $VNF1 /bin/bash -c "sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' /usr/lib/python3/dist-packages/ryu/app/simple_switch_13.py > qos_simple_switch_13.py"
 sudo docker exec -d $VNF1 ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py
 
-#echo "Controlador DOWNLOAD configurado, para iniciarlo acceda a vclass de la red correspondiente y ejecute: "
-#echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
-#echo " "
-read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
+echo " "
+read -p "Controlador configurado, pulsa INTRO para configurar las reglas de QoS"
 
 #REGLAS SIN PUERTO Y CON PARAMETROS
 sudo docker exec -it $VNF1 curl -X PUT -d '"tcp:127.0.0.1:6632"' http://$IPController:8080/v1.0/conf/switches/0000000000000002/ovsdb_addr

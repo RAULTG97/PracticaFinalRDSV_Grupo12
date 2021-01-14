@@ -11,10 +11,6 @@
 
 ------------
 ## Lo que falta por hacer:
-- QoS: tenemos una version inicial similar a la de la práctica 2.5.
-	- Ver que dirección IP utilizamos para el controller (Actualmente está en 127.0.0.1). La idea es que este controller nos sirva para controlar tambien los brgX de VNX
-	- Ver como definimos las reglas, si se establece para todos los puertos UDP o solo para el 5002 (igual que en la practica)
-	- Ver como definimos los ovs de VNX para que sean controlados por el controller de VCLASS y asi podamos gestionar la QoS de subida
 - IPv6: TO DO
 - DHCPv6: TO DO
 

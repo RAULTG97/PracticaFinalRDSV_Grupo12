@@ -38,11 +38,13 @@ echo "OSM Onboarding..."
 sleep 10
 
 
+echo " "
+echo "ESCENARIOS DE VNX..."
 #LEVANTAR ESCENARIOS VNX
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -t
 sudo vnx -f vnx/nfv3_server_lxc_ubuntu64.xml -t
 
-
+#CONSTANTES
 VCPEPRIVIP="192.168.255.1"
 VCPEPUBIP1="10.2.3.1"
 VCPEPUBIP2="10.2.3.2"
@@ -51,13 +53,18 @@ IPController2="10.255.0.3"
 IPBRG1="10.255.0.2"
 IPBRG2="10.255.0.4"
 
+
 #CREAR VXLANs
+echo " "
+echo "VXLANs CONFIGURATION..."
 ./vcpe_start.sh $VCPE1 $IPController1 $IPBRG1 
 ./vcpe_start.sh $VCPE2 $IPController2 $IPBRG2 
 
 
 #CONFIGURAR VYOS [NAT Y DHCP]
 #Configuracion de tunel VXLAN entre vclass y vcpe (Desde NFV VyOS)
+echo " "
+echo "VyOS CONFIGURATION..."
 ./configureVyOS.sh $VCPE1 $VCPEPRIVIP $VCPEPUBIP1
 ./configureVyOS.sh $VCPE2 $VCPEPRIVIP $VCPEPUBIP2
 
@@ -89,57 +96,56 @@ echo "IPController2 --> $IPController2"
 echo " "
 
 
-read -p "STOOoOoOOOOOOooOoP MIRAR IPS"
+#QoS
 echo "QoS CONFIGURATION..."
 echo "DOWNLOAD..."
-#QoS
+
 #CAUDAL DE DOWNLOAD
 echo "DOWNLOAD NET 1..."
 ./setQoSDownload.sh $VCPE1 $IPController1
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 1 DOWNLOAD..."
+sleep 5
 echo "DOWNLOAD NET 2..."
-read -p "STOOoOoOOOOOOooOooOOooooOooOOoooOOOooooP"
 ./setQoSDownload.sh $VCPE2 $IPController2
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 2 DOWNLOAD..."
+sleep 5
 
-#SE PUEDE HACER DE LAS DOS FORMAS CREO EL QOS DE UPLOAD (MAÑANA LO PRUEBO OTRA VEZ)
 #CAUDAL DE UPLOAD
-read -p "STOOoOoOOOOOOooOooOOooooOooOOoooOOOooooP"
 echo "UPLOAD NET 1..."
 ./setQoSUpload.sh brg1 $IPBRG1 $IPController1
 echo " "
 echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
+sleep 5
+echo "UPLOAD NET 2..."
+./setQoSUpload.sh brg2 $IPBRG2 $IPController2
+echo " "
+echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
+sleep 5
+
+
+#QoS UPLOAD CON VNX
+#CAUDAL DE UPLOAD
+#echo "UPLOAD NET 1..."
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net1
+#echo " "
+#read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net1
+#echo " "
+#echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
 #echo "UPLOAD NET 2..."
-#./setQoSUpload.sh brg2 $IPBRG2 $IPController2
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
+#echo " "
+#read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
+#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
+#sleep 5
 #echo " "
 #echo "CONFIGURADAS REGLAS QoS NET 2 UPLOAD..."
 
 
-#CAUDAL DE UPLOAD
-#echo "UPLOAD NET 1..."
-#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net1
-#echo "Controlador UPLOAD configurado, para iniciarlo acceda a vclass de la red 1 y ejecute: "
-#echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
-#echo " "
-#read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
-#sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net1
-#echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
 
-echo "UPLOAD NET 2..."
-sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-controller-net2
-#echo "Controlador UPLOAD configurado, para iniciarlo acceda a vclass de la red 2 y ejecute: "
-#echo "ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py"
-#echo " "
-read -p "Controlador configurado, pulsa cualquier tecla para configurar las reglas de QoS"
-sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x config-QoS-rules-net2
-sleep 5
-echo "CONFIGURADAS REGLAS QoS NET 1 UPLOAD..."
-
-
-
-
+echo " "
 echo "ESCENARIO LANZADO CORRECTAMENTE, PARA PROBARLO CON IPERF3: "
 echo "Servidor: iperf3 -s -i 1"
 echo "Cliente:  iperf3 -c direccionIPDestino -b capacidadMaximaCola[M] -l 1200"

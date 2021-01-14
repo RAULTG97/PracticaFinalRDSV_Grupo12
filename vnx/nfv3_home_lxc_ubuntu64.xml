@@ -195,7 +195,6 @@ SPAIN
         ovs-vsctl set bridge br0 other-config:datapath-id=0000000000000001
         ovs-vsctl set-controller br0 tcp:10.255.0.3:6633
         ovs-vsctl set-manager ptcp:6632
-        <!-- ryu-manager ryu.app.rest_qos ryu.app.rest_conf_switch ./qos_simple_switch_13.py &amp;-->
     </exec>
     <exec seq="config-QoS-rules-net2" type="verbatim">
       
