@@ -10,11 +10,6 @@
 ![Escenario](https://github.com/RAULTG97/PracticaFinalRDSV_Grupo12/blob/main/images/PracticaFinalRDSV.png)
 
 ------------
-## Lo que falta por hacer:
-- IPv6: TO DO
-- DHCPv6: TO DO
-
-------------
 ## RECOMENDACIONES PREVIAS
 1. Abrir un terminal y ejecutar:
   ```sh
@@ -58,7 +53,6 @@
   ```sh
   ./destroyScenario.sh vcpe-1
   ```
-
 ------------
 ## REQUISITOS
 - Utilizar un contenedor VyOS virtualizado como router residencial (vCPE)
@@ -74,7 +68,6 @@
 		- Incluyendo la gestión de la calidad de servicio desde Ryu, controlando el brgX, para limitar el ancho de banda de subida desde la red residencial
 	- Soporte IPv6
 	- DHCP para IPv6
-
 
 ------------
 ## PASOS SEGUIDOS
@@ -133,8 +126,8 @@
 		
 	3.7. Gestion de la calidad de servicio
 	
-		Script setQoS.sh
-		TO DO!
+		Script setQoSUpload.sh y setQoSDownload.sh
+
 
 4. Script vcpe_start.sh
 
@@ -150,7 +143,9 @@
 	- Gestiona el servidor DHCP para que los hosts de las redes residenciales puedan obtener direcciones IP en la interfaz eth1 al ejecutar dhclient
 	- Se define un SNAT en la eth2
 	- Ruta IP por defecto hacia 10.2.3.254 (router r1)
+	- Configuracion DHCP para IPv6
 
-6. Script setQoS.sh
-**	TO DO
-**
+6. Script setQoSDownload.sh y setQoSUpload.sh
+	- El escenario controlará la QoS tanto en el Uplink (brgX) como en el Downlink (vclass)
+	- El controlador Ryu, ubicado en el vclass, gestionará las reglas de QoS a implementar en los switches Openflow definidos en los brgX y los vclass
+	- Pasando como parámetros a ambos scripts las direcciones IP de los switches y el controlador, se definirán las reglas de QoS con la API de Ryu
