@@ -6,10 +6,8 @@ echo "ARRANCANDO ESCENARIO..."
 #Switches OVS para AccessNet y ExtNet
 sudo ovs-vsctl --if-exists del-br AccessNet
 sudo ovs-vsctl --if-exists del-br ExtNet
-sudo ovs-vsctl --if-exists del-br QoS
 sudo ovs-vsctl add-br AccessNet
 sudo ovs-vsctl add-br ExtNet
-sudo ovs-vsctl add-br QoS
 
 
 #Creamos las imagenes de Docker
