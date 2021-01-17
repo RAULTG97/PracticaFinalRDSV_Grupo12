@@ -46,9 +46,13 @@ sudo lxc-attach --clear-env -n $BRGX -- bash -c "ovs-vsctl set-manager ptcp:6632
 echo " "
 read -p "Controlador configurado, pulsa INTRO para configurar las reglas de QoS"
 
+sleep 2
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X PUT -d '\"tcp:$IPBridge:6632\"' http://$IPController:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr"
+sleep 2
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X POST -d '{\"port_name\": \"vxlan1\", \"type\": \"linux-htb\", \"max_rate\": \"6000000\", \"queues\": [{\"max_rate\": \"2000000\"}, {\"min_rate\": \"2000000\"}]}' http://$IPController:8080/qos/queue/0000000000000001" 
+sleep 2
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X POST -d '{\"match\": {\"nw_src\": \"$IP1\"}, \"actions\":{\"queue\": \"1\"}}' http://$IPController:8080/qos/rules/0000000000000001"
+sleep 2
 sudo lxc-attach --clear-env -n $BRGX -- bash -c "curl -X POST -d '{\"match\": {\"nw_src\": \"$IP2\"}, \"actions\":{\"queue\": \"0\"}}' http://$IPController:8080/qos/rules/0000000000000001"
 
 
