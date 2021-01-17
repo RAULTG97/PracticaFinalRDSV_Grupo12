@@ -103,10 +103,10 @@ sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h21
 sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x dhclient6-h22
 
 #OBTENEMOS LAS IP ASIGNADAS
-IPH11v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h11-ipv6`
-IPH12v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h12-ipv6`
-IPH21v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h21-ipv6`
-IPH22v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h22-ipv6`
+IPH11v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h11-ipv6 | grep 2001`
+IPH12v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h12-ipv6 | grep 2001`
+IPH21v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h21-ipv6 | grep 2001`
+IPH22v6=`sudo vnx -f vnx/nfv3_home_lxc_ubuntu64.xml -x get-h22-ipv6 | grep 2001`
 echo " "
 echo "IPH11v6 --> $IPH11v6"
 echo " "
