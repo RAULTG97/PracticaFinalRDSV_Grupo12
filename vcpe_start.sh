@@ -1,4 +1,6 @@
 #!/bin/bash
+# GRUPO 12 - RAUL | VICTOR | ALEJANDRO
+# CURSO 2020/21 | RDSV
 
 USAGE="
 Usage:

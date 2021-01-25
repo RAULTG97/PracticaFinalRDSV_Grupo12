@@ -1,4 +1,6 @@
 #!/bin/bash
+# GRUPO 12 - RAUL | VICTOR | ALEJANDRO
+# CURSO 2020/21 | RDSV
 
 USAGE="
 Usage:
@@ -50,6 +52,7 @@ read -p "Controlador configurado, pulsa INTRO para configurar las reglas de QoS"
 
 #REGLAS SIN PUERTO Y CON PARAMETROS
 sudo docker exec -it $VNF1 curl -X PUT -d '"tcp:127.0.0.1:6632"' http://$IPController:8080/v1.0/conf/switches/0000000000000002/ovsdb_addr
+sleep 3
 sudo docker exec -it $VNF1 curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "12000000", "queues": [{"max_rate": "4000000"}, {"min_rate": "8000000"}]}' http://$IPController:8080/qos/queue/0000000000000002
 sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "'$IP1'"}, "actions":{"queue": "1"}}' http://$IPController:8080/qos/rules/0000000000000002
 sudo docker exec -it $VNF1 curl -X POST -d '{"match": {"nw_dst": "'$IP2'"}, "actions":{"queue": "0"}}' http://$IPController:8080/qos/rules/0000000000000002

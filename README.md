@@ -1,6 +1,6 @@
 # Practica Final RDSV Grupo12
 *Desarrollo de la práctica final de la asignatura RDSV - Curso 2020/2021*
-## Autores :
+## Autores : 
 - Raúl Torres García
 - Alejandro Vargas Perez
 - Victor Loureiro Sancho

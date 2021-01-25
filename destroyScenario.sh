@@ -1,4 +1,6 @@
 #!/bin/bash
+# GRUPO 12 - RAUL | VICTOR | ALEJANDRO
+# CURSO 2020/21 | RDSV
 
 ./vcpe_destroy.sh vcpe-1
 ./vcpe_destroy.sh vcpe-2
