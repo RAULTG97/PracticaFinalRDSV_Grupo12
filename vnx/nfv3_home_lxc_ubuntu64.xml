@@ -135,6 +135,7 @@ SPAIN
     <exec seq="config-QoS-rules-net1" type="verbatim">
       
         curl -X PUT -d '"tcp:10.255.0.2:6632"' http://10.255.0.1:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
+        sleep 2
         curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://10.255.0.1:8080/qos/queue/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://10.255.0.1:8080/qos/rules/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://10.255.0.1:8080/qos/rules/0000000000000001
@@ -231,6 +232,7 @@ SPAIN
     <exec seq="config-QoS-rules-net2" type="verbatim">
       
         curl -X PUT -d '"tcp:10.255.0.4:6632"' http://10.255.0.3:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr 
+        sleep 2
         curl -X POST -d '{"port_name": "vxlan1", "type": "linux-htb", "max_rate": "6000000", "queues": [{"max_rate": "2000000"}, {"min_rate": "2000000"}]}' http://10.255.0.3:8080/qos/queue/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.20"}, "actions":{"queue": "1"}}' http://10.255.0.3:8080/qos/rules/0000000000000001 
         curl -X POST -d '{"match": {"nw_src": "192.168.255.21"}, "actions":{"queue": "0"}}' http://10.255.0.3:8080/qos/rules/0000000000000001
